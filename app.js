@@ -5,7 +5,7 @@ const express = require('express');
 const app = express();
 
 // Google Cloud Services
-const keyFilename="./geo-vune-firebase-adminsdk-2avs2-8a70f70b85"; //replace this with api key file
+const keyFilename="./geo-vune-firebase-adminsdk-2avs2-8a70f70b85.json"; //replace this with api key file
 const projectId = "geo-vune" //replace with your project id
 const bucketName = `${projectId}.appspot.com`;
 const mime = require('mime-types');
@@ -33,21 +33,21 @@ const uploadTo = `subfolder/package.json`;
 const fileMime = mime.lookup(filePath);
 
 app.get('/', (req, res) => {
-  res.status(200).send('Geo Vune API Demo');
-
 	  bucket.upload(filePath,{
-	    destination:uploadTo,
-	    public:true,
-	    metadata: {contentType: fileMime,cacheControl: "public, max-age=300"}
-	}, function(err, file) {
-	    if(err)
-	    {
-	        console.log(err);
-	        return;
-	    }
-	    console.log(createPublicFileURL(uploadTo));
+		    destination:uploadTo,
+		    public:true,
+		    metadata: {contentType: fileMime,cacheControl: "public, max-age=300"}
+
+		}, function(err, file) {
+		    if(err)
+		    {
+		        console.log(err);
+		        return;
+		    }
+		    console.log(createPublicFileURL(uploadTo));
+
+		    res.status(200).send('Planet Vune API Demo');
 	});
-	console.log('Geo-vune')
 });
 
 function createPublicFileURL(storageName) {
