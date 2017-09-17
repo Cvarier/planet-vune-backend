@@ -29,25 +29,11 @@ firebase.initializeApp({
 });*/
 
 const filePath = `./package.json`;
-const uploadTo = `subfolder/package.json`;
+const uploadTo = `videos/`;
 const fileMime = mime.lookup(filePath);
 
 app.get('/', (req, res) => {
-	  bucket.upload(filePath,{
-		    destination:uploadTo,
-		    public:true,
-		    metadata: {contentType: fileMime,cacheControl: "public, max-age=300"}
-
-		}, function(err, file) {
-		    if(err)
-		    {
-		        console.log(err);
-		        return;
-		    }
-		    console.log(createPublicFileURL(uploadTo));
-
-		    res.status(200).send('Planet Vune API Demo');
-	});
+	res.status(200).send('Planet Vune API Demo');
 });
 
 function createPublicFileURL(storageName) {
@@ -59,8 +45,22 @@ app.get('/retrieveVideoURL', (req, res) => {
 
 });
 
- app.post('/postVideo', (req, res) => {
+app.post('/postVideo', (req, res) => {
+ 	console.log(`Retrieving video URL from Firebase`);
+ 	// to change in request body
+	bucket.upload(req.filepath,{
+		  destination:uploadTo,
+		  public:true,
+		  metadata: {contentType: fileMime,cacheControl: "public, max-age=300"}
 
+		}, function(err, file) {
+		  	if(err)
+		    {
+		        console.log(err);
+		        return;
+		    }
+		    console.log(createPublicFileURL(uploadTo));
+	});
 });
 
 if (module === require.main) {
